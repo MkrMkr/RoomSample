@@ -11,11 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mirek.db.User;
 import com.example.mirek.roomsample.R;
 import com.example.mirek.viewmodel.UsersListViewModel;
-
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,13 +27,9 @@ public class UsersListFragment extends Fragment {
     public UsersListFragment() {
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        //TODO: databinding
         View rootView = inflater.inflate(R.layout.fragment_users_list, container, false);
         usersAdapter = new UsersAdapter();
         usersList = rootView.findViewById(R.id.usersList);
@@ -49,9 +42,9 @@ public class UsersListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final UsersListViewModel userViewModel = ViewModelProviders.of(this).get(UsersListViewModel.class);
         userViewModel.getUsers().observe(this, users -> {
-            Log.i("testDb", "usersListFragment users: "+users);
-            if(users!=null) {
-                usersAdapter.setUsers(users);
+            Log.i("testDb", "usersListFragment users: " + users);
+            if (users != null) {
+                usersAdapter.submitList(users);
             }
         });
 
