@@ -52,16 +52,5 @@ public abstract class AppDatabase extends RoomDatabase {
                 .build();
     }
 
-    private void exposeDatabase(Context context) {
-        if (context.getDatabasePath(DATABASE_NAME).exists()) {
-            setDatabaseCreated();
-        }
-    }
-
-    private void setDatabaseCreated() {
-        Log.i("testDb", "buildDatabase->setDatabaseCreated()->postValue");
-        // databaseCreated.postValue(true);
-    }
-
     public abstract UserDao userDao();
 }
