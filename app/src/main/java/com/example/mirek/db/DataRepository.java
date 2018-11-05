@@ -2,10 +2,8 @@ package com.example.mirek.db;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.os.Handler;
 import android.util.Log;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -20,8 +18,11 @@ public class DataRepository {
 
         observableUsers = new MediatorLiveData<>();
         observableUsers.addSource(repDatabase.userDao().getAll(), users -> {
-            Log.i("testDb", "DataRepository constructor-> users:"+users);
-            observableUsers.postValue(users);
+            Log.i("testDb", "DataRepository->onChanged, users:" + users);
+            if (repDatabase.getDatabaseCreated().getValue() != null) {
+                Log.i("testDb", "DataRepository->onChanged, postValue users:" + users);
+                observableUsers.postValue(users);
+            }
         });
 
     }

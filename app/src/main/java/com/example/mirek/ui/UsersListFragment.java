@@ -41,6 +41,7 @@ public class UsersListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final UsersListViewModel userViewModel = ViewModelProviders.of(this).get(UsersListViewModel.class);
+        Log.i("testDb", "onActivityCreated before users observer");
         userViewModel.getUsers().observe(this, users -> {
             Log.i("testDb", "usersListFragment users: " + users);
             if (users != null) {

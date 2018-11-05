@@ -17,12 +17,8 @@ public class BasicApp extends Application {
         executors = new AppExecutors();
     }
 
-    public AppDatabase getDatabase() {
-        return AppDatabase.getInstance(this,executors);
-    }
-
     public DataRepository getRepository() {
-        return DataRepository.getInstance(getDatabase());
+        return DataRepository.getInstance(AppDatabase.getInstance(this, executors));
     }
 
 }

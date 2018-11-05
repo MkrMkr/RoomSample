@@ -4,7 +4,9 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.mirek.BasicApp;
@@ -18,12 +20,15 @@ public class UsersListViewModel extends AndroidViewModel {
 
     public UsersListViewModel(@NonNull Application application) {
         super(application);
-
+        Log.i("testDb", "UserListViewModel created");
         observableUsers = new MediatorLiveData<>();
-        observableUsers.setValue(null);
+       // observableUsers.setValue(null);
         LiveData<List<User>> users = ((BasicApp) application).getRepository().getUsers();
-        Log.i("testDb", "UsersListViewModel users:"+users);
-        observableUsers.addSource(users, observableUsers::setValue);
+
+        observableUsers.addSource(users, users1 -> {
+            observableUsers.setValue(users1);
+            Log.i("testDb", "UserListViewModel-> onChanged:" + users1);
+        });
     }
 
     public LiveData<List<User>> getUsers() {

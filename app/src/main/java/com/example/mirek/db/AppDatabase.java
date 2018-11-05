@@ -21,10 +21,13 @@ public abstract class AppDatabase extends RoomDatabase {
     private final MutableLiveData<Boolean> databaseCreated = new MutableLiveData<>();
 
     public static AppDatabase getInstance(Context context, AppExecutors executors) {
+        Log.i("testDb", "getDbInstance:" + dbInstance);
         if (dbInstance == null) {
             synchronized (AppDatabase.class) {
                 if (dbInstance == null) {
+                    Log.i("testDb", "buildDatabase");
                     dbInstance = buildDatabase(context, executors);
+                    dbInstance.notifyDatabaseAlreadyCreated(context);
                 }
             }
         }
@@ -38,6 +41,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
+                        //if database already exists this callback want be invoked
                         Log.i("testDb", "buildDatabase->onCreate");
                         executors.getDbIO().execute(() -> executors.getDbIO().execute(() -> {
                             dbInstance.runInTransaction(() -> {
@@ -50,6 +54,16 @@ public abstract class AppDatabase extends RoomDatabase {
                     }
                 })
                 .build();
+    }
+
+    private void notifyDatabaseAlreadyCreated(final Context context) {
+        if (context.getDatabasePath(DATABASE_NAME).exists()) {
+            databaseCreated.postValue(true);
+        }
+    }
+
+    public MutableLiveData<Boolean> getDatabaseCreated() {
+        return databaseCreated;
     }
 
     public abstract UserDao userDao();
